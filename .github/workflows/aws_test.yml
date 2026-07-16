@@ -4,7 +4,7 @@ on:
    push:
     branches:
       - main
-permisssions: 
+permissions: 
   actions: write
   vulnerability-alerts: read
 jobs:
