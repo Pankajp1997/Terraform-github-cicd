@@ -17,42 +17,39 @@ permissions:
 
 jobs:
   terraform-plan:
-      name: "Terraform Plan"
-      runs-on: ubuntu-latest
-      outputs:
-        tf_workspace: ${{ steps.env-vars.outputs.tf_workspace }}
-      defaults:
-        run:
-          shell: bash
+    name: "Terraform Plan"
+    runs-on: ubuntu-latest
+    outputs:
+      tf_workspace: ${{ steps.env-vars.outputs.tf_workspace }}
+    defaults:
+      run:
+        shell: bash
 
-      steps:
-        # 1. Check out the repository code
-        - name: Checkout Code
-          uses: actions/checkout@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-        # 2. Add terraform in the flow 
-        - name: Setup Terraform
-          uses: hashicorp/setup-terraform@v3
-          with:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
           terraform_version: 1.13.3
-        - name: Setup TFLint
-          uses: terraform-linters/setup-tflint@v3
-          with:
-            tflint_version: v0.52.0
 
-         # 3. initialising TFlint in the repo    
-        - name: Init TFLint
-          env:
-              GITHUB_TOKEN: ${{ secrets.TOKEN }}
-          run: tflint --init
-        
-        - name: Run TFLint
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v3
+        with:
+          tflint_version: v0.52.0
+
+      - name: Init TFLint
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: tflint --init
+
+      - name: Run TFLint
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: tflint -f compact
-        
-        # vulnerability Scanning using Trivy 
-       - name: Run Trivy vulnerability scanner in IaC mode
+
+      - name: Run Trivy vulnerability scanner in IaC mode
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: "config"
@@ -62,7 +59,7 @@ jobs:
           ignore-unfixed: true
           severity: "CRITICAL,HIGH"
 
-       - name: Terraform Init
+      - name: Terraform Init
         id: init
         run: terraform init
 
@@ -73,4 +70,3 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate
-
