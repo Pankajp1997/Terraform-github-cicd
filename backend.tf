@@ -1,5 +1,4 @@
 terraform {
-
   backend "s3" {
     bucket       = "staging-my-terraform-bucket-pankaj"  # Your bucket name
     key          = "terraform/state/main/terraform.tfstate"
