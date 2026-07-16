@@ -6,5 +6,5 @@ terraform {
     use_lockfile = true  # S3 Native Locking (Terraform 1.13+)
     encrypt      = true
   }
-    required_version = "1.15.8"
+    required_version = "1.13.3"
 }
