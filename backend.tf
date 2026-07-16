@@ -1,4 +1,5 @@
 terraform {
+
   backend "s3" {
     bucket       = "staging-my-terraform-bucket-pankaj"  # Your bucket name
     key          = "terraform/state/main/terraform.tfstate"
@@ -6,4 +7,5 @@ terraform {
     use_lockfile = true  # S3 Native Locking (Terraform 1.13+)
     encrypt      = true
   }
+    required_version = "~> 1.1.9"
 }
